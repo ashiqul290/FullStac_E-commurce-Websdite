@@ -6,6 +6,6 @@ const auth = express.Router()
 auth.post('/signup', signupController)
 
 // // localhost:5100/api/v1/api/auth/login
-// auth.post('/login', loginController)
+ auth.post('/login', loginController)
 
 module.exports = auth ;   

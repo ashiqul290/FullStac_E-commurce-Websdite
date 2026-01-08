@@ -36,8 +36,22 @@ exports.signupController = async (req, res) => {
   }
 };
 
-// exports.loginController = asyncHandler(
-//     (req,res)=>{
-//         res.send('login success')
-//     }
-// )
+exports.loginController = async (req, res) => {
+  let { email, password } = req.body;
+  let existingUser = await userModel.findOne({ email });
+  if (!existingUser) {
+    apiResponse(res, 404, "invelid  credential");
+  } else {
+    bcrypt.compare(password, existingUser.password, function (err, result) {
+      if (err) {
+        apiResponse(res, 500, "Somting went wrong");
+      } else {
+        if (!result) {
+          apiResponse(res, 401, "invelid credential ");
+        } else {
+          apiResponse(res, 200, "login successfully", existingUser);
+        }
+      }
+    });
+  }
+};
