@@ -3,11 +3,19 @@ const { apiResponse } = require("../utils/apiResponse");
 const bcrypt = require("bcrypt");
 const { sendEmail } = require("../helpers/sendEmail");
 const { rendoOtpGanaret } = require("../helpers/otp");
+const { validEmailCheker } = require("../helpers/validEmailCheker");
+const { genaretJWTtoken } = require("../utils/jwt");
+
 
 exports.signupController = async (req, res) => {
   try {
-    let otp = rendoOtpGanaret();
     let { name, email, password, address, phone, role } = req.body;
+    let emailCheker = validEmailCheker(email);
+    if (!emailCheker) {
+      apiResponse(res, 400, "invelid email address");
+    }
+
+    let otp = rendoOtpGanaret();
     bcrypt.hash(password, 12, async function (err, hash) {
       if (err) {
         apiResponse(res, 500, err);
@@ -38,6 +46,11 @@ exports.signupController = async (req, res) => {
 
 exports.loginController = async (req, res) => {
   let { email, password } = req.body;
+  let emailCheker = validEmailCheker(email);
+  if (!emailCheker) {
+    apiResponse(res, 400, "invelid email address");
+  }
+
   let existingUser = await userModel.findOne({ email });
   if (!existingUser) {
     apiResponse(res, 404, "invelid  credential");
@@ -49,10 +62,21 @@ exports.loginController = async (req, res) => {
         if (!result) {
           apiResponse(res, 401, "invelid credential ");
         } else {
-          apiResponse(res, 200, "login successfully", existingUser);
+          let user = {
+            _id: existingUser._id,
+            name: existingUser.name,
+            email: existingUser.email,
+            role: existingUser.role,
+          }
+          // jwt genaret 
+          let  token = genaretJWTtoken(user);
+          apiResponse(res, 200, "login successfully", {...user , token});
         }
       }
     });
   }
 };
- 
+exports.allUserController = async(req, res)=>{
+  let users = await userModel.find({}).select('_id name email role')
+   apiResponse(res, 200, "fatch user all data successfull", users);
+}
