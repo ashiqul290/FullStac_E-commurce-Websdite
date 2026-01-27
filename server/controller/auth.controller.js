@@ -6,7 +6,6 @@ const { rendoOtpGanaret } = require("../helpers/otp");
 const { validEmailCheker } = require("../helpers/validEmailCheker");
 const { genaretJWTtoken } = require("../utils/jwt");
 
-
 exports.signupController = async (req, res) => {
   try {
     let { name, email, password, address, phone, role } = req.body;
@@ -67,16 +66,24 @@ exports.loginController = async (req, res) => {
             name: existingUser.name,
             email: existingUser.email,
             role: existingUser.role,
+            login: true
+          };
+          if (existingUser.role == "admin" || existingUser.role == "marchent") {
+            req.session.cookie.maxAge = 60000 * 20;
+            req.session.user = user;
+          } else {
+            req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000;
+            req.session.user = user;
           }
-          // jwt genaret 
-          let  token = genaretJWTtoken(user);
-          apiResponse(res, 200, "login successfully", {...user , token});
+          // jwt genaret
+          // let  token = genaretJWTtoken(user);
+          apiResponse(res, 200, "login successfully", user);
         }
       }
     });
   }
 };
-exports.allUserController = async(req, res)=>{
-  let users = await userModel.find({}).select('_id name email role')
-   apiResponse(res, 200, "fatch user all data successfull", users);
-}
+exports.allUserController = async (req, res) => {
+  let users = await userModel.find({}).select("_id name email role");
+  apiResponse(res, 200, "fatch user all data successfull", users);
+};
