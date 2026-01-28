@@ -8,6 +8,7 @@ const {MongoStore} = require('connect-mongo');
 const app = express();
 const port = process.env.PORT;
 dbConfig()
+app.use(express.static('uploads'))
 app.use(express.json())
 
 app.use(session({
@@ -31,3 +32,4 @@ app.use(globalErrorHendleing)
 app.listen(port, () => {
   console.log(`server is running and port number is ${port}`);
 });
+ 

@@ -3,6 +3,8 @@ const {
   signupController,
   loginController,
   allUserController,
+  verifyOtpController,
+  resendOtpController,
 } = require("../../../controller/auth.controller");
 const { meddletoken } = require("../../../middleware/jwtMeddleToken");
 const { isAuthoraize } = require("../../../middleware/isAuthoraize");
@@ -15,13 +17,16 @@ auth.post("/signup", signupController);
 // localhost:5100/api/v1/api/auth/login
 auth.post("/login", loginController);
 
+// localhost:5100/api/v1/api/auth/verifyotp
+auth.post("/verifyotp", verifyOtpController);
+auth.post("/resendotp", resendOtpController);
 // localhost:5100/api/v1/api/auth/login
 // auth.get('/allusers',meddletoken, allUserController)
 auth.get(
   "/allusers",
   isAuthoraize,
-  (req, res, next) => isAdminorMarchen(req, res, next, ["admin", "marchent"]),
-  allUserController
+  isAdminorMarchen("admin", "marchent"),
+  allUserController,
 );
 
 module.exports = auth;

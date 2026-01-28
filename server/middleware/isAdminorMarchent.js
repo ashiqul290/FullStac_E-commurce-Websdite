@@ -1,9 +1,11 @@
-const { apiResponse } = require("../utils/apiResponse")
+const { apiResponse } = require("../utils/apiResponse");
 
-exports.isAdminorMarchen = (req , res, next, role)=>{
-    if(role.includes(req.session.user.role)){
-        next()
-    }else{
-        apiResponse(res, 401, "Access denied")
+exports.isAdminorMarchen = (...role) => {
+    return (req, res, next) => {
+    if (role.includes(req.session.user.role)) {
+      next();
+    } else {
+      apiResponse(res, 401, "Access denied");
     }
-}
+  };
+};

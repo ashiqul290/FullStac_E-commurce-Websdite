@@ -8,7 +8,7 @@ exports.sendEmail = async (email, name , ) => {
         user: process.env.AUTH_EMAIL,
         pass: process.env.AUTH_PASSWORD,
       },
-    });
+    }); 
 
     const info = await transporter.sendMail({
       from: process.env.AUTH_EMAIL,
