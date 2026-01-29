@@ -7,10 +7,10 @@ const subcategorySchema = new mongoose.Schema(
       trim: true,
       required: [true, "name is required"],
     },
-   category: [
+    category: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Subcategory"
+        ref: "Subcategory",
       },
     ],
   },

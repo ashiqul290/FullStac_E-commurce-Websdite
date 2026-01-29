@@ -23,3 +23,5 @@ exports.allCategoryController = asyncHandler(async (req, res, next) => {
   let allcategory = await categoryModel.find({})
   apiResponse(res, 200, 'all category' , allcategory )
 });
+
+

@@ -1,16 +1,16 @@
-const express = require('express');
-const auth = require('./auth');
-const category = require('./auth/category');
-const product = require('./product');
-const router = express.Router()
+const express = require("express");
+const auth = require("./auth");
+const category = require("./auth/category");
+const product = require("./product");
+const router = express.Router();
 
 // localhost:5100/api/v1/api/auth
-router.use('/auth', auth)
+router.use("/auth", auth);
 
 // localhost:5100/api/v1/api/category
-router.use('/category', category)
+router.use("/category", category);
 
 // localhost:5100/api/v1/api/product
-router.use('/product', product)
+router.use("/product", product);
 
-module.exports = router ;  
+module.exports = router;

@@ -16,12 +16,12 @@ const categorySchema = new mongoose.Schema(
     subcategory: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Subcategory"
+        ref: "Subcategory",
       },
     ],
   },
   {
-    timestamps: true,  
+    timestamps: true,
   },
 );
 
