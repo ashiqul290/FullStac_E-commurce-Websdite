@@ -10,7 +10,7 @@ const port = process.env.PORT;
 dbConfig()
 app.use(express.static('uploads'))
 app.use(express.json())
-
+ 
 app.use(session({
   store: MongoStore.create({ mongoUrl: 'mongodb+srv://ecommurce:ecommurce@cluster0.jtiah2x.mongodb.net/ecommurce?appName=Cluster0' }),
   name : 'KingShop',
