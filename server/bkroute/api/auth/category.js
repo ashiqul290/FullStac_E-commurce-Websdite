@@ -14,7 +14,7 @@ auth.post("/add-category",isAuthoraize,isAdminorMarchen("marchent","admin"), upl
 
 auth.get("/all-category", allCategoryController);
 
-auth.patch("/update-category/:id", updateCategoryController)
+auth.patch("/update-category/:id",upload.single("image"), updateCategoryController)
 auth.delete("/delete-category/:id", deleteCategoryController)
 
 module.exports = auth; 

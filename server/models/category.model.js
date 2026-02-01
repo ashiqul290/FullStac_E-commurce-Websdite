@@ -7,6 +7,10 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       required: [true, "name is required"],
     },
+    slug: {
+      type: String,
+        trim: true,
+    },
     image: {
       type: String,
     },
