@@ -11,11 +11,11 @@ exports.addCategoryController = asyncHandler(async (req, res, next) => {
   let { filename } = req.file;
 
   let slug = slugify(name, {
-  replacement: '-',  // replace spaces with replacement character, defaults to `-`
-  remove: undefined, // remove characters that match regex, defaults to `undefined`
-  lower: true,      // convert to lower case, defaults to `false`
-  trim: true         // trim leading and trailing replacement chars, defaults to `true`
-})
+    replacement: "-", // replace spaces with replacement character, defaults to `-`
+    remove: undefined, // remove characters that match regex, defaults to `undefined`
+    lower: true, // convert to lower case, defaults to `false`
+    trim: true, // trim leading and trailing replacement chars, defaults to `true`
+  }); 
   let image = `${process.env.SERVER_URL}/${filename}`;
   if (!name) {
     apiResponse(res, 401, "name is  required");
@@ -25,14 +25,14 @@ exports.addCategoryController = asyncHandler(async (req, res, next) => {
     discount,
     subcategory,
     image,
-    slug
+    slug,
   });
   await category.save();
   apiResponse(res, 201, "category created", category);
 });
 
 exports.allCategoryController = asyncHandler(async (req, res, next) => {
-  let allcategory = await categoryModel.find({}).populate();
+  let allcategory = await categoryModel.find({}).populate().select('_id name slug image subcategory')
   apiResponse(res, 200, "all category", allcategory);
 });
 
@@ -81,4 +81,19 @@ exports.deleteCategoryController = asyncHandler(async (req, res) => {
       apiResponse(res, 200, "category delete successfully");
     }
   });
+});
+
+exports.singleCategoryController = asyncHandler(async (req, res) => {
+  let { slug } = req.params;
+  let singlecategory = await categoryModel.findOne({ slug });
+  if (singlecategory) {
+    apiResponse(
+      res,
+      200,
+      "single category fetched successfully",
+      singlecategory,
+    );
+  } else {
+    apiResponse(res, 500, "single category not found");
+  }
 });
