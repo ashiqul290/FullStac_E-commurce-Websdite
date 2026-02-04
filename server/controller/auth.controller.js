@@ -131,6 +131,7 @@ exports.loginController = async (req, res) => {
     });
   }
 };
+
 exports.allUserController = async (req, res) => {
   let users = await userModel.find({}).select("_id name email role");
   apiResponse(res, 200, "fatch user all data successfull", users);
