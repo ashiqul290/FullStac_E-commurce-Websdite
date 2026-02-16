@@ -18,6 +18,7 @@ router.use("/subcategory", subcategory);
 
 // localhost:5100/api/v1/api/product
 router.use("/product", product);
+
 // localhost:5100/api/v1/api/bannar
 router.use("/banner", banner);
 // localhost:5100/api/v1/api/marchent

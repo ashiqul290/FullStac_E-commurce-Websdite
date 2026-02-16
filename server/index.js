@@ -22,10 +22,10 @@ app.use(session({
 // locathost:5100/api/v1/
 app.use(process.env.BASE_ROUTER, _)
 
-app.get('/getsession' ,(req , res)=>{
-  console.log(req.session)
-  res.send('get session')
-})
+// app.get('/getsession' ,(req , res)=>{
+//   console.log(req.session)
+//   res.send('get session')
+// })
 
 app.use(globalErrorHendleing)
 
