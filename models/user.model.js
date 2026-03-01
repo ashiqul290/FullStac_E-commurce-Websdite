@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    review: [{
+      type: mongoose.Types.ObjectId,
+      ref: "Review"
+    }],
   },
   {
     timestamps: true,
