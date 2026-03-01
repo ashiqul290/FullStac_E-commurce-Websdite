@@ -29,3 +29,27 @@ exports.variantController = asyncHandler(async (req, res) => {
     );
   }
 });
+exports.updateVariantController = asyncHandler(async (req, res) => {
+  let { id } = req.params;
+
+  let { sku, size, color } = req.body;
+  let variant = await variantModel.findOneAndUpdate(
+    { _id: id },
+    { sku, size, color },
+    { new: true },
+  );
+  apiResponse(res, 200, "variant update successfull", variant);
+});
+exports.deleteVariantController = asyncHandler(async (req, res) => {
+  let { id } = req.params;
+  let variant = await variantModel.findOneAndDelete({ _id : id });
+    if(!variant){
+      apiResponse(res, 404, "variant not found")
+    }else{
+      await productModel.findOneAndUpdate(
+        { _id: variant.product },
+        { $pull: { variant: variant._id } }
+      );
+      apiResponse(res, 200, "variant deleted");
+    }
+});

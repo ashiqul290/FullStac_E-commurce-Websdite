@@ -7,6 +7,7 @@ const router = express.Router();
 const banner = require('./banner')
 const marchent = require('./marchent');
 const variant = require("./product/variant");
+const review = require("./product/review");
 
 // localhost:5100/api/v1/api/auth
 router.use("/auth", auth);
@@ -19,8 +20,12 @@ router.use("/subcategory", subcategory);
 
 // localhost:5100/api/v1/api/product
 router.use("/product", product);
+
 // localhost:5100/api/v1/api/variant
 router.use("/variant", variant);
+
+// localhost:5100/api/v1/api/variant
+router.use("/review", review);
 
 // localhost:5100/api/v1/api/bannar
 router.use("/banner", banner);
