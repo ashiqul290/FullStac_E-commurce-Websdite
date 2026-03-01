@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const variantSchema = new mongoose.Schema(
   {
+    product : {
+      type: mongoose.Types.ObjectId,
+      ref: "Product"
+    },
     size:[ {
       type: String,
      required : [true , "size is required"],
