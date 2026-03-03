@@ -8,6 +8,7 @@ const banner = require('./banner')
 const marchent = require('./marchent');
 const variant = require("./product/variant");
 const review = require("./product/review");
+const card = require("./product/Card");
 
 // localhost:5100/api/v1/api/auth
 router.use("/auth", auth);
@@ -26,6 +27,8 @@ router.use("/variant", variant);
 
 // localhost:5100/api/v1/api/variant
 router.use("/review", review);
+// localhost:5100/api/v1/api/card
+router.use("/card", card);
 
 // localhost:5100/api/v1/api/bannar
 router.use("/banner", banner);
