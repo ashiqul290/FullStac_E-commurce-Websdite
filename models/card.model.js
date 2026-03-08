@@ -23,9 +23,8 @@ const cardSchema = new mongoose.Schema(
        required: [true, "total price is required"],
     },
   },
-  {
-    timestamps: true,
-  },
+
+  
 );
 
 module.exports = mongoose.model("card", cardSchema);
