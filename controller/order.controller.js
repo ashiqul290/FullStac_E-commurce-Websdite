@@ -7,11 +7,15 @@ exports.orderController = asyncHandler(async (req, res) => {
   let { user, shipping, paymentmethod, items } = req.body;
   let carditems = await cardModel.find({ user });
 
-  placeOrder = new orderModel({
+  let totalPricecard = carditems.reduce((curr, prev) => {
+    return prev.totalprice + curr
+  }, 0);
+  let placeOrder = new orderModel({
     user,
     shipping,
     paymentmethod,
     items: carditems,
+    totalprice : totalPricecard
   });
 
   await placeOrder.save();
@@ -19,12 +23,15 @@ exports.orderController = asyncHandler(async (req, res) => {
 });
 
 exports.AllorderController = asyncHandler(async (req, res) => {
-  let orderData = await orderModel.find({}).populate({
-    path: "user",
-    select: "name email"
-  }).populate({
+  let orderData = await orderModel
+    .find({})
+    .populate({
+      path: "user",
+      select: "name email",
+    })
+    .populate({
       path: "items.product",
-      select: "title price image -_id"
-  })
+      select: "title price image  -_id",
+    });
   apiResponse(res, 200, "all order fetch", orderData);
 });

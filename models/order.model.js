@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+
 const shippingSchema = new Schema(
   {
     phone: {
@@ -35,10 +36,10 @@ const orderShema = new Schema(
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
-    // totalprice: {
-    //   type: Number,
-    //   required: [true, "totalprice price is required"],
-    // },
+    totalprice: {
+      type: Number,
+      required: [true, "totalprice price is required"],
+    },
     // card: {
     //   type: mongoose.Types.ObjectId,
     //   ref: "card",
@@ -53,9 +54,9 @@ const orderShema = new Schema(
           type: mongoose.Types.ObjectId,
           ref: "Product",
         },
-        quantity: {
+        quntity: {
           type: Number,
-          default : 1,
+          default : 1
         },
       },
     ],
@@ -64,6 +65,11 @@ const orderShema = new Schema(
       type: String,
       enum: ["cod", "online"],
       required: [true, "paymentmethod is required"],
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["paid", "unpaid"],
+      default: "unpaid"
     },
     deliveryStatus: {
       type: String,
