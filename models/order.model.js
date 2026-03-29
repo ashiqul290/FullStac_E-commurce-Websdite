@@ -66,6 +66,9 @@ const orderShema = new Schema(
       enum: ["cod", "online"],
       required: [true, "paymentmethod is required"],
     },
+    trans_id: {
+      type: String,
+    },
     paymentStatus: {
       type: String,
       enum: ["paid", "unpaid"],
