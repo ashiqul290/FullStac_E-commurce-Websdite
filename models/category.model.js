@@ -14,6 +14,9 @@ const categorySchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    public_id: {
+      type: String,
+    },
     discount: {
       type: Number,
     },

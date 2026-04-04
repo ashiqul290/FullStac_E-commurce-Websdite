@@ -2,21 +2,33 @@ const categoryModel = require("../models/category.model");
 const { apiResponse } = require("../utils/apiResponse");
 const { asyncHandler } = require("../utils/asyncHandler");
 const slugify = require("slugify");
-
 let path = require("path");
 let fs = require("fs");
+const  cloudinary  = require("../utils/cloudinary");
+
 
 exports.addCategoryController = asyncHandler(async (req, res, next) => {
   let { name, discount, subcategory } = req.body;
-  let { filename } = req.file;
+  let { filename  } = req.file;
+  // Upload an image
+const uploadResult = await cloudinary.uploader.upload(
+  req.file.path,
+);
+
+ let oldpath = path.join(__dirname, "../uploads");
+  fs.unlink(`${oldpath}/${filename}`, async (err) => {
+    if (err) {
+      apiResponse(res, 500, err.message);
+    } 
+  });  
 
   let slug = slugify(name, {
     replacement: "-", // replace spaces with replacement character, defaults to `-`
     remove: undefined, // remove characters that match regex, defaults to `undefined`
     lower: true, // convert to lower case, defaults to `false`
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
-  }); 
-  let image = `${process.env.SERVER_URL}/${filename}`;
+  });
+  // let image = `${process.env.SERVER_URL}/${filename}`;
   if (!name) {
     apiResponse(res, 401, "name is  required");
   }
@@ -24,7 +36,8 @@ exports.addCategoryController = asyncHandler(async (req, res, next) => {
     name,
     discount,
     subcategory,
-    image,
+    image: uploadResult.url,
+    public_id : uploadResult.public_id,
     slug,
   });
   await category.save();
@@ -32,7 +45,10 @@ exports.addCategoryController = asyncHandler(async (req, res, next) => {
 });
 
 exports.allCategoryController = asyncHandler(async (req, res, next) => {
-  let allcategory = await categoryModel.find({}).populate().select('_id name slug image subcategory')
+  let allcategory = await categoryModel
+    .find({})
+    .populate()
+    .select("_id name slug image subcategory");
   apiResponse(res, 200, "all category", allcategory);
 });
 
@@ -68,19 +84,11 @@ exports.updateCategoryController = asyncHandler(async (req, res, next) => {
 
 exports.deleteCategoryController = asyncHandler(async (req, res) => {
   let { id } = req.params;
-  let category = await categoryModel.findOne({ _id: id });
-
-  let filepath = category.image.split("/");
-  let imagepath = filepath[filepath.length - 1];
-  let oldpath = path.join(__dirname, "../uploads");
-  fs.unlink(`${oldpath}/${imagepath}`, async (err) => {
-    if (err) {
-      apiResponse(res, 500, err.message);
-    } else {
-      await categoryModel.findOneAndDelete({ _id: id });
+  let category = await categoryModel.findOneAndDelete({ _id: id });
+  
+await cloudinary.uploader.destroy(category.public_id);
       apiResponse(res, 200, "category delete successfully");
-    }
-  });
+ 
 });
 
 exports.singleCategoryController = asyncHandler(async (req, res) => {

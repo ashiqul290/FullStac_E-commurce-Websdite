@@ -13,8 +13,8 @@ const { isAdminorMarchen } = require("../../../middleware/isAdminorMarchent");
 
 auth.post(
   "/add-category",
-  isAuthoraize,
-  isAdminorMarchen("marchent", "admin"),
+  // isAuthoraize,
+  // isAdminorMarchen("marchent", "admin"),
   upload.single("image"),
   addCategoryController,
 );
@@ -31,8 +31,8 @@ auth.patch(
 );
 auth.delete(
   "/delete-category/:id",
-  isAuthoraize,
-  isAdminorMarchen("marchent", "admin"),
+  // isAuthoraize,
+  // isAdminorMarchen("marchent", "admin"),
   deleteCategoryController,
 );
 
