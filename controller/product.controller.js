@@ -4,6 +4,7 @@ const { apiResponse } = require("../utils/apiResponse");
 const { asyncHandler } = require("../utils/asyncHandler");
 const path = require("path");
 const fs = require("fs");
+const orderModel = require("../models/order.model");
 
 exports.addProductcontroller = asyncHandler(async (req, res) => {
   const { title } = req.body;
@@ -19,8 +20,7 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
   const slug = slugify(title, { lower: true });
 
   const images = req.files.map(
-    (file) =>
-      `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`,
   );
 
   const product = await productModel.create({
@@ -34,9 +34,9 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
 
 exports.allProductcontroller = asyncHandler(async (req, res) => {
   let allProducts = await productModel.find({}).populate({
-    path : "variant",
-    select : "sku size color"
-  })
+    path: "variant",
+    select: "sku size color",
+  });
   apiResponse(res, 200, "data fatch successfully", allProducts);
 });
 
@@ -60,8 +60,7 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
 
   // new images
   const images = req.files?.map(
-    (file) =>
-      `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`,
   );
 
   const slug = req.body.title
@@ -75,7 +74,7 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
       image: images || product.image,
       slug,
     },
-    { new: true }
+    { new: true },
   );
 
   return apiResponse(res, 200, "Product updated successfully", updatedProduct);
@@ -104,17 +103,61 @@ exports.deleteProductcontroller = asyncHandler(async (req, res) => {
   return apiResponse(res, 200, "Product deleted successfully");
 });
 
-exports.singleProductController = asyncHandler(async(req, res)=>{
-    let {slug} = req.params;
-    let product = await productModel.findOne({slug}).populate({
-    path : "variant",
-    select : "sku size color"
-  })
-    if(!product){
+exports.singleProductController = asyncHandler(async (req, res) => {
+  let { slug } = req.params;
+  let product = await productModel.findOne({ slug }).populate({
+    path: "variant",
+    select: "sku size color",
+  });
+  if (!product) {
+    apiResponse(res, 404, " product not found");
+  } else {
+    apiResponse(res, 200, "single product fatch", product);
+  }
+});
 
-      apiResponse(res, 404 , ' product not found' )
-    }else{
-      apiResponse(res, 200 , 'single product fatch' , product)
-    }
-})
+exports.letestProductController = asyncHandler(async (req, res) => {
+  const { limit } = req.query;
+  let product = await productModel
+    .find({})
+    .sort({ createdAt: -1 })
+    .limit(limit || 10);
+  apiResponse(res, 200, "letest product fatch", product);
+});
 
+exports.topsellProductController = asyncHandler(async (req, res) => {
+  let topSelling = await orderModel.aggregate([
+    {
+      $unwind: "$items",
+    },
+    {
+      $group: {
+        _id: "$items.product",
+        totalSells: {
+          $sum: "$items.quntity",
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "product",
+      },
+    },
+    {
+      $unwind: "$product",
+    },
+    {
+      $limit: 5,
+    },
+    {
+      $sort: {
+        totalSells: -1,
+      },
+    },
+  ]);
+
+  apiResponse(res, 200, "top sell product fatch", topSelling);
+});
