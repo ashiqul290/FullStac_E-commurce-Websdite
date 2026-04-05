@@ -38,38 +38,38 @@ product.get("/top-sell-product", topsellProductController);
 product.get("/test", async (req, res) => {
   let result = await productModel.aggregate([
     // product filtering and sorting
-    // {
-    //   $match: {
-    //     price: {
-    //       $gte: 1300,
-    //     },
-    //   },
-    // },
-    // {
-    //   $sort: {
-    //     price: 1,
-    //   },
-    // },
-    // {
-    //   $group: {
-    //     _id: null ,
-    //      totalPrice: {
-    //       $sum: "$price",
-    //     },
-    //     avgPrice: {
-    //       $avg: "$price",
-    //     },
-    //     minPrice: {
-    //       $min: "$price",
-    //     },
-    //     maxPrice: {
-    //       $max: "$price",
-    //     },
-    //     countItem: {
-    //       $sum: 1,
-    //     },
-    //   },
-    // },
+    {
+      $match: {
+        price: {
+          $gte: 1300,
+        },
+      },
+    },
+    {
+      $sort: {
+        price: 1,
+      },
+    },
+    {
+      $group: {
+        _id: null ,
+         totalPrice: {
+          $sum: "$price",
+        },
+        avgPrice: {
+          $avg: "$price",
+        },
+        minPrice: {
+          $min: "$price",
+        },
+        maxPrice: {
+          $max: "$price",
+        },
+        countItem: {
+          $sum: 1,
+        },
+      },
+    },
 
 
     // array unwinding
