@@ -2,13 +2,24 @@ const bannerModel = require("../models/banner.model");
 const { apiResponse } = require("../utils/apiResponse");
 const { asyncHandler } = require("../utils/asyncHandler");
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
+const cloudinary  = require("../utils/cloudinary");
 exports.addBannerController = asyncHandler(async (req, res, next) => {
   let { filename } = req.file;
   let { url } = req.body;
-  let image = `${process.env.SERVER_URL}/${filename}`;
+  const uploadResult = await cloudinary.uploader.upload(
+    req.file.path,
+  );
+  
+   let oldpath = path.join(__dirname, "../uploads");
+    fs.unlink(`${oldpath}/${filename}`, async (err) => {
+      if (err) {
+        apiResponse(res, 500, err.message);
+      } 
+    }); 
   let banner = new bannerModel({
-    image,
+      image: uploadResult.url,
+    public_id : uploadResult.public_id,
     url,
   });
   await banner.save()
@@ -51,15 +62,6 @@ exports.updateBannerController = asyncHandler(async(req,res)=>{
 exports.deleteBannerController = asyncHandler(async(req,res)=>{
     let {id} = req.params;
      let bannar = await bannerModel.findOne({ _id: id });
-      let filepath = bannar.image.split("/");
-      let imagepath = filepath[filepath.length - 1];
-      let oldpath = path.join(__dirname, "../uploads");
-      fs.unlink(`${oldpath}/${imagepath}`, async (err) => {
-        if (err) {
-          apiResponse(res, 500, err.message);
-        } else {
-          await bannerModel.findOneAndDelete({ _id: id });
+    await cloudinary.uploader.destroy(bannar.public_id);
           apiResponse(res, 200, "bannar delete successfully");
-        }
-      });
 })

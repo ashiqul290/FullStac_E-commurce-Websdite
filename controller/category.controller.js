@@ -6,7 +6,6 @@ let path = require("path");
 let fs = require("fs");
 const  cloudinary  = require("../utils/cloudinary");
 
-
 exports.addCategoryController = asyncHandler(async (req, res, next) => {
   let { name, discount, subcategory } = req.body;
   let { filename  } = req.file;

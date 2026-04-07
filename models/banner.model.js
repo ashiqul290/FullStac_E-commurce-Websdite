@@ -7,6 +7,9 @@ const bannerSchema = new mongoose.Schema(
       trim: true,
       required: [true, "image is required"],
     },
+    public_id : {
+      type: String,
+      },
     url: {
       type: String,
         trim: true,
