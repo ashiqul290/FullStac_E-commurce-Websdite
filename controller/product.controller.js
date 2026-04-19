@@ -5,6 +5,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const path = require("path");
 const fs = require("fs");
 const orderModel = require("../models/order.model");
+const cloudinary = require("cloudinary").v2;
 
 exports.addProductcontroller = asyncHandler(async (req, res) => {
   const { title } = req.body;
@@ -19,8 +20,19 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
 
   const slug = slugify(title, { lower: true });
 
-  const images = req.files.map(
-    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`,
+  const images = await Promise.all(
+    req.files.map(async (file) => {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "products",
+      });
+
+      await fs.unlink(file.path);
+
+      return {
+        url: result.secure_url,
+        public_id: result.public_id,
+      };
+    })
   );
 
   const product = await productModel.create({
@@ -42,26 +54,38 @@ exports.allProductcontroller = asyncHandler(async (req, res) => {
 
 exports.updateProductcontroller = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const product = await productModel.findById(id);
 
+  const product = await productModel.findById(id);
   if (!product) {
     return apiResponse(res, 404, "Product not found");
   }
 
-  // delete old images
-  for (let item of product.image) {
-    const imageName = item.split("/").pop();
-    const oldPath = path.join(__dirname, "../uploads", imageName);
+  let images = product.image;
 
-    if (fs.existsSync(oldPath)) {
-      fs.unlinkSync(oldPath);
+  if (req.files && req.files.length > 0) {
+    // ✅ 1. upload new images first
+    const newImages = await Promise.all(
+      req.files.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "products",
+        });
+
+        await fs.unlink(file.path);
+
+        return {
+          url: result.secure_url,
+          public_id: result.public_id,
+        };
+      })
+    );
+
+    // ✅ 2. delete old images
+    for (let item of product.image) {
+      await cloudinary.uploader.destroy(item.public_id);
     }
-  }
 
-  // new images
-  const images = req.files?.map(
-    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`,
-  );
+    images = newImages;
+  }
 
   const slug = req.body.title
     ? slugify(req.body.title, { lower: true })
@@ -71,10 +95,10 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
     id,
     {
       ...req.body,
-      image: images || product.image,
+      image: images,
       slug,
     },
-    { new: true },
+    { new: true }
   );
 
   return apiResponse(res, 200, "Product updated successfully", updatedProduct);
@@ -82,20 +106,15 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
 
 exports.deleteProductcontroller = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const product = await productModel.findById(id);
 
+  const product = await productModel.findById(id);
   if (!product) {
     return apiResponse(res, 404, "Product not found");
   }
 
-  // delete images
+  // ✅ delete from Cloudinary
   for (let item of product.image) {
-    const imageName = item.split("/").pop();
-    const oldPath = path.join(__dirname, "../uploads", imageName);
-
-    if (fs.existsSync(oldPath)) {
-      fs.unlinkSync(oldPath);
-    }
+    await cloudinary.uploader.destroy(item.public_id);
   }
 
   await productModel.findByIdAndDelete(id);
