@@ -4,7 +4,6 @@ const {
   allCategoryController,
   updateCategoryController,
   deleteCategoryController,
-  singleCategoryController,
 } = require("../../../controller/category.controller");
 const auth = express.Router();
 const upload = require("../../../utils/upload");
@@ -20,7 +19,7 @@ auth.post(
 );
 
 auth.get("/all-category", allCategoryController);
-auth.get("/single-category/:slug", singleCategoryController);
+// auth.get("/single-category/:slug", singleCategoryController);
 
 auth.patch(
   "/update-category/:id",
@@ -31,8 +30,8 @@ auth.patch(
 );
 auth.delete(
   "/delete-category/:id",
-  // isAuthoraize,
-  // isAdminorMarchen("marchent", "admin"),
+  isAuthoraize,
+  isAdminorMarchen("marchent", "admin"),
   deleteCategoryController,
 );
 
