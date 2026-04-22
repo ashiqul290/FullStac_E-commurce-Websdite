@@ -20,6 +20,7 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: 'mongodb+srv://ecommurce:ecommurce@cluster0.jtiah2x.mongodb.net/ecommurce?appName=Cluster0' }),
   name : 'KingShop',
   secret: process.env.SESSION_SECRET,
+  rolling: true,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
