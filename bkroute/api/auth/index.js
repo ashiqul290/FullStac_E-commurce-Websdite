@@ -5,10 +5,12 @@ const {
   allUserController,
   verifyOtpController,
   resendOtpController,
+  getMeController,
 } = require("../../../controller/auth.controller");
 const { meddletoken } = require("../../../middleware/jwtMeddleToken");
 const { isAuthoraize } = require("../../../middleware/isAuthoraize");
 const { isAdminorMarchen } = require("../../../middleware/isAdminorMarchent");
+const { marchentController } = require("../../../controller/marchent.controller");
 const auth = express.Router();
 
 // localhost:5100/api/v1/api/auth/signup
@@ -28,5 +30,8 @@ auth.get(
   isAdminorMarchen("admin", "marchent"),
   allUserController,
 );
+
+auth.get("/me",isAuthoraize,isAdminorMarchen("admin") ,getMeController);
+
 
 module.exports = auth;

@@ -136,3 +136,9 @@ exports.allUserController = async (req, res) => {
   let users = await userModel.find({}).select("_id name email role");
   apiResponse(res, 200, "fatch user all data successfull", users);
 };
+
+exports.getMeController = asyncHandler( async (req, res) => {
+ let user = await userModel.findOne({email: req?.session?.user?.email}).select("email _id name address phone role")
+
+  apiResponse(res, 200, "user get success", user);
+})
