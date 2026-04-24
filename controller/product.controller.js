@@ -63,8 +63,8 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
 
   let images = product.image;
 
+  // ✅ image upload (optional)
   if (req.files && req.files.length > 0) {
-    // ✅ 1. upload new images first
     const newImages = await Promise.all(
       req.files.map(async (file) => {
         const result = await cloudinary.uploader.upload(file.path, {
@@ -80,7 +80,7 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
       })
     );
 
-    // ✅ 2. delete old images
+    // old image delete
     for (let item of product.image) {
       await cloudinary.uploader.destroy(item.public_id);
     }
@@ -88,9 +88,20 @@ exports.updateProductcontroller = asyncHandler(async (req, res) => {
     images = newImages;
   }
 
-  const slug = req.body.title
-    ? slugify(req.body.title, { lower: true })
-    : product.slug;
+  // ✅ slug logic (IMPORTANT)
+  let slug = product.slug;
+
+  if (req.body.title && req.body.title !== product.title) {
+    // title change হলে slug update হবে
+    let baseSlug = slugify(req.body.title, { lower: true });
+    slug = baseSlug;
+
+    // duplicate avoid
+    let count = 1;
+    while (await productModel.findOne({ slug, _id: { $ne: id } })) {
+      slug = `${baseSlug}-${count++}`;
+    }
+  }
 
   const updatedProduct = await productModel.findByIdAndUpdate(
     id,
