@@ -124,11 +124,20 @@ exports.deleteProductcontroller = asyncHandler(async (req, res) => {
     return apiResponse(res, 404, "Product not found");
   }
 
-  // ✅ delete from Cloudinary
-  for (let item of product.image) {
-    await cloudinary.uploader.destroy(item.public_id);
+  // ✅ Cloudinary image delete (safe)
+  if (product.image && product.image.length > 0) {
+    for (let item of product.image) {
+      try {
+        if (item.public_id) {
+          await cloudinary.uploader.destroy(item.public_id);
+        }
+      } catch (error) {
+        console.log("Cloudinary delete error:", error);
+      }
+    }
   }
 
+  // ✅ DB delete
   await productModel.findByIdAndDelete(id);
 
   return apiResponse(res, 200, "Product deleted successfully");
