@@ -3,7 +3,7 @@ const productModel = require("../models/product.model");
 const { apiResponse } = require("../utils/apiResponse");
 const { asyncHandler } = require("../utils/asyncHandler");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs").promises
 const orderModel = require("../models/order.model");
 const cloudinary = require("cloudinary").v2;
 
@@ -26,6 +26,7 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
         folder: "products",
       });
 
+      // ✅ local file delete (FIXED)
       await fs.unlink(file.path);
 
       return {
@@ -37,7 +38,7 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
 
   const product = await productModel.create({
     ...req.body,
-    image: images,
+    image: images, // ✅ array of objects
     slug,
   });
 

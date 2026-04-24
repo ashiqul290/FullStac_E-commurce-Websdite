@@ -11,11 +11,12 @@ const productSchema = new mongoose.Schema(
       required: [true , "title is required"],
       trim: true
     },
-    image: [String],
-     public_id: {
-      type: String,
-      required: true,
-    },
+    image: [
+      {
+        url: String,
+        public_id: String,
+      },
+    ],
     discription: {
       type: String,
     },
