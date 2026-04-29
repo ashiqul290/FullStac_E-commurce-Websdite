@@ -23,6 +23,9 @@ const productSchema = new mongoose.Schema(
     sku: {
       type: String,
     },
+    stock: {
+      type: Number,
+    },
     slug: {
       type: String,
       trim: true,

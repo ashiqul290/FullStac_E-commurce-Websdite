@@ -142,3 +142,16 @@ exports.getMeController = asyncHandler( async (req, res) => {
 
   apiResponse(res, 200, "user get success", user);
 })
+
+
+exports.logoutController = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return apiResponse(res, 500, "Logout failed");
+    }
+
+    res.clearCookie("connect.sid"); // session cookie name (default)
+
+    return apiResponse(res, 200, "Logout successful");
+  });
+};

@@ -17,8 +17,18 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return apiResponse(res, 400, "Image is required");
   }
+const generateUniqueSlug = async (title) => {
+  let baseSlug = slugify(title, { lower: true, strict: true });
+  let slug = baseSlug;
+  let counter = 1;
 
-  const slug = slugify(title, { lower: true });
+  while (await productModel.findOne({ slug })) {
+    slug = `${baseSlug}-${counter++}`;
+  }
+
+  return slug;
+};
+const slug = await generateUniqueSlug(title);
 
   const images = await Promise.all(
     req.files.map(async (file) => {
@@ -26,7 +36,6 @@ exports.addProductcontroller = asyncHandler(async (req, res) => {
         folder: "products",
       });
 
-      // ✅ local file delete (FIXED)
       await fs.unlink(file.path);
 
       return {

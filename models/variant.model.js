@@ -9,13 +9,9 @@ const variantSchema = new mongoose.Schema(
     size:[ {
       type: String,
      required : [true , "size is required"],
-     emum: ["S","L","M","XL"],
+     enum: ["S","M","L","XL","XXL"],
      default:"L"
     }],
-    color: {
-        type: String,
-        trim: true
-    },
     sku: {
         required : [true , "sku is required"],
         type: String,

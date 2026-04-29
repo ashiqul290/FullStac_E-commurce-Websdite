@@ -6,6 +6,7 @@ const {
   verifyOtpController,
   resendOtpController,
   getMeController,
+  logoutController,
 } = require("../../../controller/auth.controller");
 const { meddletoken } = require("../../../middleware/jwtMeddleToken");
 const { isAuthoraize } = require("../../../middleware/isAuthoraize");
@@ -33,5 +34,6 @@ auth.get(
 
 auth.get("/me",isAuthoraize,isAdminorMarchen("admin") ,getMeController);
 
+auth.post('/logout' ,logoutController)
 
 module.exports = auth;
