@@ -3,10 +3,12 @@ import React from 'react'
 import Container from '../common/Container'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { HiMiniArrowLongRight } from "react-icons/hi2";
+import { FaStar } from 'react-icons/fa';
 
 
 
-const Cart_Details = () => {
+const Cart_Details = ({ item }) => {
+
     return (
         <>
             <section className='py-25 bg-[#F9F8FE]'>
@@ -44,27 +46,27 @@ const Cart_Details = () => {
                             <div className="py-15 pl-15 pr-25 bg-white mt-10">
                                 <TabPanel className="">
                                     <div className="">
-                                        <h3 className='text-[24px] text-primary font-bold font-inter leading-[100%]'>Viverra a consectetur</h3>
-                                        <p className='text-[16px] text-tertiary font-normal font-nunito mt-5.5'>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over Vivamus ibendum magna Lorem ipsum dolor sit amet, consectetur adipiscing elit.Contrary to popular belief, Lorem Ipsum is not simply lassical Latin literature from 45 BC, making it</p>
+                                        <h3 className='text-[24px] text-primary font-bold font-inter leading-[100%]'>{item.brand}</h3>
+                                        <p className='text-[16px] text-tertiary font-normal font-nunito mt-5.5'>{item.description}</p>
 
                                         <h4 className='text-[24px] text-primary font-bold font-inter leading-[100%] mt-8'>More Details</h4>
                                         <div className=" space-y-5.5 mt-5.5">
                                             <div className="flex gap-2 items-center">
                                                 <HiMiniArrowLongRight className='text-tertiary' />
-                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>{item.shippingInformation}</p>
                                             </div>
                                             <div className="flex gap-2 items-center">
                                                 <HiMiniArrowLongRight className='text-tertiary' />
-                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>Lorem Ipsum has been the ‘s standard dummy text. Lorem Ipsumum is simply dummy text.</p>
+                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>{item.returnPolicy}</p>
                                             </div>
                                             <div className="flex gap-2 items-center">
                                                 <HiMiniArrowLongRight className='text-tertiary' />
-                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>type here your detail one by one li more add</p>
+                                                <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>{item.warrantyInformation}</p>
                                             </div>
-                                            <div className="flex gap-2 items-center">
+                                            {/* <div className="flex gap-2 items-center">
                                                 <HiMiniArrowLongRight className='text-tertiary' />
                                                 <p className='text-[16px] text-tertiary font-normal font-nunito leading-[100%]'>has been the industry’s standard dummy text ever since. Lorem Ips</p>
-                                            </div>
+                                            </div> */}
 
                                         </div>
 
@@ -79,7 +81,7 @@ const Cart_Details = () => {
                                         <div className="mt-8 space-y-6">
                                             <div className="flex justify-between border-b pb-4">
                                                 <span className="text-[16px] font-semibold text-primary">Weight</span>
-                                                <span className="text-[16px] text-tertiary">1.2 kg</span>
+                                                <span className="text-[16px] text-tertiary">{item.dimensions.width} kg</span>
                                             </div>
 
                                             <div className="flex justify-between border-b pb-4">
@@ -107,27 +109,32 @@ const Cart_Details = () => {
 
                                         <div className="mt-8 space-y-8">
 
-                                            {/* Review 1 */}
-                                            <div className="border-b pb-6">
-                                                <div className="flex justify-between items-center">
-                                                    <h4 className="text-[18px] font-semibold text-primary">John Doe</h4>
-                                                    <span className="text-yellow-500">★★★★★</span>
-                                                </div>
-                                                <p className="text-[16px] text-tertiary mt-3">
-                                                    Amazing quality product! Totally worth the price. I highly recommend this.
-                                                </p>
-                                            </div>
+                                            {/* Review  */}
+                                            {
+                                                item.reviews.map((review, index) => (
 
-                                            {/* Review 2 */}
-                                            <div>
-                                                <div className="flex justify-between items-center">
-                                                    <h4 className="text-[18px] font-semibold text-primary">Sarah Khan</h4>
-                                                    <span className="text-yellow-500">★★★★☆</span>
-                                                </div>
-                                                <p className="text-[16px] text-tertiary mt-3">
-                                                    Good product but delivery was slightly delayed. Overall satisfied.
-                                                </p>
-                                            </div>
+                                                    <div className="border-b pb-6">
+                                                        <div className="flex justify-between items-center">
+                                                            <h4 className="text-[18px] font-semibold text-primary">{review.reviewerName}</h4>
+
+                                                            <div className=" flex gap-1 items-center">
+                                                                <FaStar className='text-amber-600' />
+                                                                <FaStar className='text-amber-600' />
+                                                                <FaStar className='text-amber-600' />
+                                                                <FaStar className='text-amber-600' />
+                                                                <FaStar className='text-gray-600' />
+                                                            </div>
+                                                        </div>
+                                                        <h4 className="text-[16px] font-semibold text-primary/70 mt-2">{review.reviewerEmail}</h4>
+
+                                                        <p className="text-[16px] text-tertiary mt-6">
+                                                            {review.comment}
+                                                        </p>
+                                                    </div>
+                                                ))
+                                            }
+
+
 
                                         </div>
                                     </div>
@@ -139,14 +146,8 @@ const Cart_Details = () => {
                                         </h3>
 
                                         <div className="mt-8">
-                                            <div className="w-full h-100 rounded-lg overflow-hidden">
-                                                <iframe
-                                                    className="w-full h-full"
-                                                    src="https://www.youtube.com/embed/7fD6_1xv-a4?si=91MkCuWVY-8k2nMb"
-                                                    title="Product Video"
-                                                    frameBorder="0"
-                                                    allowFullScreen
-                                                ></iframe>
+                                            <div className="w-full h-100  overflow-hidden">
+                                                <iframe width="560" height="315" src="https://www.youtube.com/embed/1BaOvLw4pEM?si=zuBjp8l6Hk6dcq8N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                             </div>
                                         </div>
                                     </div>

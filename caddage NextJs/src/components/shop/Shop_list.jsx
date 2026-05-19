@@ -13,6 +13,7 @@ import { FaRegHeart, FaStar } from "react-icons/fa";
 import { PiShoppingCart } from "react-icons/pi";
 import { IoMdSearch } from "react-icons/io";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import Link from "next/link";
 
 const Shop_list = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -73,6 +74,7 @@ const Shop_list = () => {
           >
             {currentProducts.map((product, index) => (
 
+             <Link href={'/single_shop?id=' + product.id} key={index}>
               <div
                 key={index}
                 className="bg-white pb-5 shadow-xl relative overflow-hidden cursor-pointer group"
@@ -127,6 +129,7 @@ const Shop_list = () => {
                   </h4>
                 </div>
               </div>
+              </Link>
             ))}
           </motion.div>
         </AnimatePresence>

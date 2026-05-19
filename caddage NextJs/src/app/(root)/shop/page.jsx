@@ -7,7 +7,11 @@ const page = () => {
   return (
     <>
     {/* <Shop/> */}
+    <div className="">
+
+
     <Shop_list/>
+    </div>
     </>
   )
 }
