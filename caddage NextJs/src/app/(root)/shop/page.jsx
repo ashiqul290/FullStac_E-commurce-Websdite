@@ -1,3 +1,4 @@
+import RootShop from '@/components/shop/RootShop';
 import Shop from '@/components/shop/Shop'
 import Shop_list from '@/components/shop/Shop_list'
 import React from 'react'
@@ -7,11 +8,10 @@ const page = () => {
   return (
     <>
     {/* <Shop/> */}
-    <div className="">
+   
+    <RootShop />
 
-
-    <Shop_list/>
-    </div>
+   
     </>
   )
 }

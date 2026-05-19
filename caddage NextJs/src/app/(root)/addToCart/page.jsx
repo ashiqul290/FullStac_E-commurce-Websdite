@@ -6,7 +6,7 @@ const page = () => {
   return (
     
     <>
-    <Cart_page/>
+    
     <Product_Detalis/>
     </>
   )

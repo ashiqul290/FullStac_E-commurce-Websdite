@@ -5,7 +5,6 @@ import React from 'react'
 const page = () => {
   return (
     <>
-    <Cheakout/>
     <Cheakout_List/>
     </>
   )

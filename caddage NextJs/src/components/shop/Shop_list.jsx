@@ -47,9 +47,9 @@ const Shop_list = () => {
   };
 
   return (
-    <section className="pt-28.25 pb-30 bg-white">
+    <section className=" pb-30 bg-white">
       <Container>
-        {/* Top Section */}
+        {/* Top Section
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-[25px] text-primary font-bold">
@@ -60,7 +60,7 @@ const Shop_list = () => {
               About {allProducts.length} results
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Product Grid */}
         <AnimatePresence mode="wait">

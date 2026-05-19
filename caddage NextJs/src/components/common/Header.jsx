@@ -22,6 +22,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -237,12 +238,14 @@ const Header = () => {
                     </div> */}
                   </Sheet>
                 </div>
+                <Link href="/addToCart">
                 <div className="p-2.5 relative text-white text-3xl rounded-full cursor-pointer duration-300 ease-in-out hover:text-sky-500">
                   <PiShoppingCart />
                   <span className="absolute top-0 right-0 text-xs bg-[#699405] text-white rounded-full px-1">
                     2
                   </span>
                 </div>
+                </Link>
               </div>
               <div className="flex gap-1 items-center border-l-2 border-[#6acc19] pl-4">
                 <div className="flex items-center gap-1 px-1 = rounded opacity-90 transition-all bg-[#0A472E] cursor-pointer">

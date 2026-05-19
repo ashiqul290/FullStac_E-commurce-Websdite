@@ -29,6 +29,10 @@ const Add_to_cart = ({item}) => {
         setCount(count - 1)
     }
   }
+
+  let handleAddToCart = ()=>{
+    alert("Product added to cart")
+    }
     return (
         <>
             <section className='py-30 bg-white'>
@@ -110,12 +114,12 @@ const Add_to_cart = ({item}) => {
                                     <FaBehance/>
                                 </div>
                             </div>
-                             <Link href="/addToCart" >
-                            <button className=' w-full bg-[#699405] border border-[#699405] text-white font-nunito font-bold text-[14px] px-7.5 py-4 text-center uppercase cursor-pointer duration-300 ease-in-out hover:bg-white hover:text-[#699405] mt-8.5'>
+                           
+                            <button onClick={handleAddToCart} className=' w-full bg-[#699405] border border-[#699405] text-white font-nunito font-bold text-[14px] px-7.5 py-4 text-center uppercase cursor-pointer duration-300 ease-in-out hover:bg-white hover:text-[#699405] mt-8.5'>
                                 Add to Cart
 
                             </button>
-                            </Link>
+                           
                         </div>
                     </div>
                 </Container>
